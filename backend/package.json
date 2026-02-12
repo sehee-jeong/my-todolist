@@ -2,9 +2,9 @@
   "name": "my-todolist-backend",
   "version": "1.0.0",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
+    "dev": "ts-node-dev --respawn --transpile-only -r dotenv/config src/app.ts",
     "build": "tsc",
-    "start": "node dist/app.js",
+    "start": "node -r dotenv/config dist/app.js",
     "test": "jest",
     "test:coverage": "jest --coverage"
   },
