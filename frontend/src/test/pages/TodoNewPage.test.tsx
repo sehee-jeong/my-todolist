@@ -73,17 +73,17 @@ describe('TodoNewPage', () => {
   });
 
   it('제목·설명·마감일 모두 입력해서 생성', async () => {
-    mockCreate.mockResolvedValueOnce(makeTodo({ description: '설명', dueDate: '2026-02-20' }));
+    mockCreate.mockResolvedValueOnce(makeTodo({ description: '설명', dueDate: '2026-02-20T10:00' }));
     renderPage();
     fireEvent.change(screen.getByLabelText('제목 *'), { target: { value: '새 할 일' } });
     fireEvent.change(screen.getByLabelText('설명 (선택)'), { target: { value: '설명' } });
-    fireEvent.change(screen.getByLabelText('마감일 (선택)'), { target: { value: '2026-02-20' } });
+    fireEvent.change(screen.getByLabelText('마감일 (선택)'), { target: { value: '2026-02-20T10:00' } });
     fireEvent.click(screen.getByRole('button', { name: '저장' }));
     await waitFor(() =>
       expect(mockCreate).toHaveBeenCalledWith({
         title: '새 할 일',
         description: '설명',
-        dueDate: '2026-02-20',
+        dueDate: '2026-02-20T10:00',
       }),
     );
   });

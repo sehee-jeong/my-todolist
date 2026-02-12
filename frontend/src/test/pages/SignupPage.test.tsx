@@ -50,7 +50,7 @@ describe('SignupPage', () => {
     fireEvent.change(screen.getByLabelText('이메일'), { target: { value: 'new@test.com' } });
     fireEvent.change(screen.getByLabelText('비밀번호'), { target: { value: 'pass1234' } });
     fireEvent.change(screen.getByLabelText('닉네임'), { target: { value: '홍길동' } });
-    fireEvent.click(screen.getByRole('button', { name: '가입하기' }));
+    fireEvent.click(screen.getByRole('button', { name: '회원가입' }));
 
     await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('/login'));
   });
@@ -62,7 +62,7 @@ describe('SignupPage', () => {
     fireEvent.change(screen.getByLabelText('이메일'), { target: { value: 'dup@test.com' } });
     fireEvent.change(screen.getByLabelText('비밀번호'), { target: { value: 'pass1234' } });
     fireEvent.change(screen.getByLabelText('닉네임'), { target: { value: '중복' } });
-    fireEvent.click(screen.getByRole('button', { name: '가입하기' }));
+    fireEvent.click(screen.getByRole('button', { name: '회원가입' }));
 
     await waitFor(() =>
       expect(screen.getByText('이미 사용 중인 이메일입니다.')).toBeInTheDocument(),
@@ -76,7 +76,7 @@ describe('SignupPage', () => {
     fireEvent.change(screen.getByLabelText('이메일'), { target: { value: 'test@test.com' } });
     fireEvent.change(screen.getByLabelText('비밀번호'), { target: { value: 'weak' } });
     fireEvent.change(screen.getByLabelText('닉네임'), { target: { value: '테스트' } });
-    fireEvent.click(screen.getByRole('button', { name: '가입하기' }));
+    fireEvent.click(screen.getByRole('button', { name: '회원가입' }));
 
     await waitFor(() =>
       expect(screen.getByText('비밀번호 정책 미충족')).toBeInTheDocument(),
@@ -96,7 +96,7 @@ describe('SignupPage', () => {
     fireEvent.change(screen.getByLabelText('이메일'), { target: { value: 'test@test.com' } });
     fireEvent.change(screen.getByLabelText('비밀번호'), { target: { value: 'pass1234' } });
     fireEvent.change(screen.getByLabelText('닉네임'), { target: { value: '테스트' } });
-    fireEvent.click(screen.getByRole('button', { name: '가입하기' }));
+    fireEvent.click(screen.getByRole('button', { name: '회원가입' }));
 
     await waitFor(() =>
       expect(screen.getByRole('button', { name: '처리 중...' })).toBeDisabled(),

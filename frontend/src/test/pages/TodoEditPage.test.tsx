@@ -51,7 +51,7 @@ describe('TodoEditPage', () => {
       expect((screen.getByLabelText('제목 *') as HTMLInputElement).value).toBe('기존 제목'),
     );
     expect((screen.getByLabelText('설명 (선택)') as HTMLTextAreaElement).value).toBe('기존 설명');
-    expect((screen.getByLabelText('마감일 (선택)') as HTMLInputElement).value).toBe('2026-02-20');
+    expect((screen.getByLabelText('마감일 (선택)') as HTMLInputElement).value).toBe('2026-02-20T00:00');
   });
 
   it('todo를 찾지 못하면 / 이동', async () => {

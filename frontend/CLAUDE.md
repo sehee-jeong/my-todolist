@@ -4,10 +4,14 @@
 
 React 19 + TypeScript 기반 Todo 앱 프론트엔드. Vite 7로 빌드, React Router DOM 7로 라우팅.
 
+## 반드시 준수할 것
+- SOLID 원칙 준수
+- Clean Architecture 준수
+
 ## 기술 스택
 
 - **React 19** + **TypeScript 5.9** (strict mode)
-- **Vite 7** (dev server, 빌드)
+- **Vite 7** (dev server, 빌드)/
 - **React Router DOM 7** (클라이언트 라우팅)
 - **Vitest v4** + **@testing-library/react** + **happy-dom** (테스트)
 - **@vitest/coverage-istanbul** (커버리지 provider)

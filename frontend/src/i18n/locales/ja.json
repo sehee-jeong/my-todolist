@@ -1,0 +1,58 @@
+{
+  "theme": {
+    "system": "システム",
+    "light": "ライト",
+    "dark": "ダーク"
+  },
+  "common": {
+    "save": "保存",
+    "saving": "保存中...",
+    "cancel": "キャンセル",
+    "loading": "読み込み中...",
+    "processing": "処理中..."
+  },
+  "auth": {
+    "login": "ログイン",
+    "signup": "新規登録",
+    "email": "メールアドレス",
+    "password": "パスワード",
+    "nickname": "ニックネーム",
+    "passwordHint": "8文字以上、英数字を含む",
+    "noAccount": "アカウントをお持ちでないですか？",
+    "hasAccount": "すでにアカウントをお持ちですか？",
+    "loginFailed": "ログインに失敗しました。もう一度お試しください。",
+    "invalidCredentials": "メールアドレスまたはパスワードが正しくありません。",
+    "emailTaken": "このメールアドレスはすでに使用されています。",
+    "signupFailed": "登録に失敗しました。もう一度お試しください。",
+    "invalidInput": "入力内容を確認してください。"
+  },
+  "todo": {
+    "myTodos": "マイタスク",
+    "addTodo": "+ タスクを追加",
+    "logout": "ログアウト",
+    "empty": "タスクがありません。追加してください！",
+    "titleLabel": "タイトル *",
+    "titleRequired": "タイトルを入力してください。",
+    "descLabel": "説明（任意）",
+    "dueDateLabel": "期日（任意）",
+    "createTitle": "タスクを追加",
+    "editTitle": "タスクを編集",
+    "createFailed": "タスクの作成に失敗しました。",
+    "editFailed": "タスクの更新に失敗しました。",
+    "loadFailed": "タスクの読み込みに失敗しました。",
+    "noAccess": "アクセス権限がありません。",
+    "complete": "完了",
+    "revert": "元に戻す",
+    "edit": "編集",
+    "delete": "削除",
+    "overdue": "期限超過",
+    "dueDate": "期日",
+    "alreadyDone": "すでに完了しています。",
+    "alreadyPending": "すでに未完了状態です。",
+    "deleteConfirm": "削除しますか？",
+    "deleteFailed": "削除に失敗しました。",
+    "filterAll": "すべて",
+    "filterPending": "進行中",
+    "filterDone": "完了"
+  }
+}

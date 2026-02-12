@@ -152,4 +152,46 @@ describe('useTodos', () => {
 
     expect(window.alert).toHaveBeenCalledWith('삭제에 실패했습니다.');
   });
+
+  it('filter=all 이면 filteredTodos가 todos와 동일', async () => {
+    mockGetAll.mockResolvedValueOnce([
+      makeTodo({ id: 'todo-1', status: 'PENDING' }),
+      makeTodo({ id: 'todo-2', status: 'DONE' }),
+    ]);
+
+    const { result } = renderHook(() => useTodos());
+    await waitFor(() => expect(result.current.loading).toBe(false));
+
+    expect(result.current.filteredTodos).toHaveLength(2);
+  });
+
+  it('filter=pending 이면 PENDING 항목만 반환', async () => {
+    mockGetAll.mockResolvedValueOnce([
+      makeTodo({ id: 'todo-1', status: 'PENDING' }),
+      makeTodo({ id: 'todo-2', status: 'DONE' }),
+    ]);
+
+    const { result } = renderHook(() => useTodos());
+    await waitFor(() => expect(result.current.loading).toBe(false));
+
+    act(() => result.current.setFilter('pending'));
+
+    expect(result.current.filteredTodos).toHaveLength(1);
+    expect(result.current.filteredTodos[0].status).toBe('PENDING');
+  });
+
+  it('filter=done 이면 DONE 항목만 반환', async () => {
+    mockGetAll.mockResolvedValueOnce([
+      makeTodo({ id: 'todo-1', status: 'PENDING' }),
+      makeTodo({ id: 'todo-2', status: 'DONE' }),
+    ]);
+
+    const { result } = renderHook(() => useTodos());
+    await waitFor(() => expect(result.current.loading).toBe(false));
+
+    act(() => result.current.setFilter('done'));
+
+    expect(result.current.filteredTodos).toHaveLength(1);
+    expect(result.current.filteredTodos[0].status).toBe('DONE');
+  });
 });

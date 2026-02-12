@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { useNavigate, Navigate, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import * as authService from '../services/authService';
 
 export default function SignupPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [nickname, setNickname] = useState('');
@@ -23,11 +25,11 @@ export default function SignupPage() {
     } catch (err: unknown) {
       const e = err as { status?: number; message?: string };
       if (e.status === 409) {
-        setError('이미 사용 중인 이메일입니다.');
+        setError(t('auth.emailTaken'));
       } else if (e.status === 400) {
-        setError(e.message ?? '입력 값을 확인해주세요.');
+        setError(e.message ?? t('auth.invalidInput'));
       } else {
-        setError('회원가입에 실패했습니다. 다시 시도해주세요.');
+        setError(t('auth.signupFailed'));
       }
     } finally {
       setLoading(false);
@@ -36,10 +38,10 @@ export default function SignupPage() {
 
   return (
     <div className="auth-container">
-      <h1>회원가입</h1>
+      <h1>{t('auth.signup')}</h1>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="email">이메일</label>
+          <label htmlFor="email">{t('auth.email')}</label>
           <input
             id="email"
             type="email"
@@ -49,18 +51,18 @@ export default function SignupPage() {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="password">비밀번호</label>
+          <label htmlFor="password">{t('auth.password')}</label>
           <input
             id="password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="8자 이상, 영문+숫자 포함"
+            placeholder={t('auth.passwordHint')}
             required
           />
         </div>
         <div className="form-group">
-          <label htmlFor="nickname">닉네임</label>
+          <label htmlFor="nickname">{t('auth.nickname')}</label>
           <input
             id="nickname"
             type="text"
@@ -71,11 +73,11 @@ export default function SignupPage() {
         </div>
         {error && <p className="error-message">{error}</p>}
         <button type="submit" disabled={loading}>
-          {loading ? '처리 중...' : '가입하기'}
+          {loading ? t('common.processing') : t('auth.signup')}
         </button>
       </form>
       <p>
-        이미 계정이 있으신가요? <Link to="/login">로그인</Link>
+        {t('auth.hasAccount')} <Link to="/login">{t('auth.login')}</Link>
       </p>
     </div>
   );

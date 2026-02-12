@@ -5,6 +5,7 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from '../../swagger/swagger.json';
 import authRoutes from './routes/auth.routes';
 import todoRoutes from './routes/todo.routes';
+import healthRoutes from './routes/health.routes';
 
 dotenv.config();
 
@@ -15,9 +16,7 @@ app.use(express.json());
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.get('/health', (_req, res) => {
-  res.status(200).json({ status: 'ok' });
-});
+app.use('/health', healthRoutes);
 
 app.use('/api/auth', authRoutes);
 app.use('/api/todos', todoRoutes);

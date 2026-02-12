@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import * as todoService from '../services/todoService';
 
 export default function TodoNewPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
@@ -14,7 +16,7 @@ export default function TodoNewPage() {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     if (!title.trim()) {
-      setError('제목을 입력해주세요.');
+      setError(t('todo.titleRequired'));
       return;
     }
     setError('');
@@ -27,7 +29,7 @@ export default function TodoNewPage() {
       });
       navigate('/');
     } catch {
-      setError('할 일 생성에 실패했습니다.');
+      setError(t('todo.createFailed'));
     } finally {
       setLoading(false);
     }
@@ -35,10 +37,10 @@ export default function TodoNewPage() {
 
   return (
     <div className="page-container">
-      <h1>할 일 추가</h1>
+      <h1>{t('todo.createTitle')}</h1>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="title">제목 *</label>
+          <label htmlFor="title">{t('todo.titleLabel')}</label>
           <input
             id="title"
             type="text"
@@ -48,7 +50,7 @@ export default function TodoNewPage() {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="description">설명 (선택)</label>
+          <label htmlFor="description">{t('todo.descLabel')}</label>
           <textarea
             id="description"
             value={description}
@@ -57,10 +59,10 @@ export default function TodoNewPage() {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="dueDate">마감일 (선택)</label>
+          <label htmlFor="dueDate">{t('todo.dueDateLabel')}</label>
           <input
             id="dueDate"
-            type="date"
+            type="datetime-local"
             value={dueDate}
             onChange={(e) => setDueDate(e.target.value)}
           />
@@ -68,10 +70,10 @@ export default function TodoNewPage() {
         {error && <p className="error-message">{error}</p>}
         <div className="form-actions">
           <button type="button" onClick={() => navigate('/')} className="btn btn--secondary">
-            취소
+            {t('common.cancel')}
           </button>
           <button type="submit" disabled={loading} className="btn btn--primary">
-            {loading ? '저장 중...' : '저장'}
+            {loading ? t('common.saving') : t('common.save')}
           </button>
         </div>
       </form>

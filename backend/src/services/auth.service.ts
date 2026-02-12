@@ -4,21 +4,11 @@ import jwt from 'jsonwebtoken';
 import * as memberRepo from '../repositories/member.repository';
 import * as refreshTokenRepo from '../repositories/refresh-token.repository';
 import { SignupDto, LoginDto, MemberPublic, AuthTokens, RefreshDto, LogoutDto } from '../types/member.types';
+import { createError } from '../shared/errors';
+import { getJwtSecret } from '../config/env';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PASSWORD_REGEX = /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/;
-
-function createError(message: string, status: number): Error & { status: number } {
-  const err = new Error(message) as Error & { status: number };
-  err.status = status;
-  return err;
-}
-
-function getJwtSecret(): string {
-  const secret = process.env.JWT_SECRET;
-  if (!secret) throw new Error('JWT_SECRET not configured');
-  return secret;
-}
 
 export async function signup(dto: SignupDto): Promise<MemberPublic> {
   if (!EMAIL_REGEX.test(dto.email)) {
