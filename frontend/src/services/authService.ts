@@ -13,14 +13,23 @@ export async function login(dto: LoginDto): Promise<AuthResponse> {
     method: 'POST',
     body: JSON.stringify(dto),
   });
-  localStorage.setItem('token', data.token);
+  localStorage.setItem('accessToken', data.accessToken);
+  localStorage.setItem('refreshToken', data.refreshToken);
   return data;
 }
 
-export function logout(): void {
-  localStorage.removeItem('token');
+export async function logout(): Promise<void> {
+  const refreshToken = localStorage.getItem('refreshToken');
+  if (refreshToken) {
+    await apiClient.request('/auth/logout', {
+      method: 'POST',
+      body: JSON.stringify({ refreshToken }),
+    }).catch(() => {});
+  }
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('refreshToken');
 }
 
 export function getToken(): string | null {
-  return localStorage.getItem('token');
+  return localStorage.getItem('accessToken');
 }

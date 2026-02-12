@@ -7,8 +7,8 @@ export default function TodoListPage() {
   const navigate = useNavigate();
   const { todos, loading, error, handleComplete, handleRevert, handleRemove } = useTodos();
 
-  function handleLogout() {
-    authService.logout();
+  async function handleLogout() {
+    await authService.logout();
     navigate('/login');
   }
 
