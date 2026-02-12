@@ -39,3 +39,22 @@ CREATE TABLE todo (
 );
 
 CREATE INDEX todo_member_id_idx ON todo (member_id);
+
+-- -------------------------------------------------------------
+-- REFRESH_TOKEN
+-- -------------------------------------------------------------
+CREATE TABLE refresh_token (
+    id         UUID         NOT NULL DEFAULT gen_random_uuid(),
+    member_id  UUID         NOT NULL,
+    token      VARCHAR(36)  NOT NULL,
+    expires_at TIMESTAMPTZ  NOT NULL,
+    created_at TIMESTAMPTZ  NOT NULL DEFAULT now(),
+
+    CONSTRAINT refresh_token_pkey      PRIMARY KEY (id),
+    CONSTRAINT refresh_token_token_uk  UNIQUE (token),
+    CONSTRAINT refresh_token_member_fk FOREIGN KEY (member_id)
+        REFERENCES member (id) ON DELETE CASCADE
+);
+
+CREATE INDEX refresh_token_token_idx     ON refresh_token (token);
+CREATE INDEX refresh_token_member_id_idx ON refresh_token (member_id);

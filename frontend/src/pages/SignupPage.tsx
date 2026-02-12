@@ -5,13 +5,13 @@ import * as authService from '../services/authService';
 
 export default function SignupPage() {
   const navigate = useNavigate();
-
-  if (authService.getToken()) return <Navigate to="/" replace />;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [nickname, setNickname] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  if (authService.getToken()) return <Navigate to="/" replace />;
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
