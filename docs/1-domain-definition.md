@@ -4,9 +4,9 @@
 
 | 항목 | 내용 |
 |------|------|
-| 버전 | v1.2 |
+| 버전 | v1.3 |
 | 작성일 | 2026-02-10 |
-| 최종 수정일 | 2026-02-10 |
+| 최종 수정일 | 2026-02-12 |
 
 ### 변경 이력
 
@@ -15,6 +15,7 @@
 | v1.0 | 2026-02-10 | 최초 작성 (프로젝트 개요·도메인 모델·비즈니스 규칙·유비쿼터스 언어) |
 | v1.1 | 2026-02-10 | 비즈니스 규칙에 검증 기준 열 추가, 요구사항-규칙 추적 매핑 섹션 추가 |
 | v1.2 | 2026-02-10 | 문서 정보·변경 이력 섹션 추가, 비기능 요구사항 섹션 추가 |
+| v1.3 | 2026-02-12 | dueDate 타입 TIMESTAMPTZ 반영, Overdue 판정 기준 현재 시각으로 변경, Refresh Token 도입(Access 15분·Refresh 7일), RefreshToken 도메인 모델 추가, 유비쿼터스 언어 보완 |
 
 ---
 
@@ -50,7 +51,17 @@
 | nickname | String | NOT NULL | 화면 표시 이름 |
 | createdAt | DateTime | NOT NULL | 회원 등록 일시 |
 
-### 3.2 할 일 (Todo)
+### 3.2 Refresh Token
+
+| 속성 | 타입 | 제약 | 설명 |
+|------|------|------|------|
+| id | UUID | PK, NOT NULL | 토큰 고유 식별자 |
+| memberId | UUID | FK, NOT NULL | 소유 회원 식별자 |
+| token | String | UNIQUE, NOT NULL | UUID v4 형식의 토큰 값 |
+| expiresAt | DateTime | NOT NULL | 토큰 만료 일시 |
+| createdAt | DateTime | NOT NULL | 발급 일시 |
+
+### 3.3 할 일 (Todo)
 
 | 속성 | 타입 | 제약 | 설명 |
 |------|------|------|------|
@@ -58,7 +69,7 @@
 | memberId | UUID | FK, NOT NULL | 소유 회원 식별자 |
 | title | String | NOT NULL | 할 일 제목 |
 | description | String | NULLABLE | 할 일 상세 설명 |
-| dueDate | Date | NULLABLE | 마감 날짜 |
+| dueDate | DateTime | NULLABLE | 마감 일시 (TIMESTAMPTZ) |
 | status | Enum | NOT NULL | 상태 (PENDING / DONE) |
 | createdAt | DateTime | NOT NULL | 생성 일시 |
 | updatedAt | DateTime | NOT NULL | 최종 수정 일시 |
@@ -72,7 +83,7 @@
 
 #### 마감 초과 (Overdue) 판정
 
-- `status = PENDING` 이고 `dueDate < 오늘 날짜` 인 경우 **마감 초과** 상태로 간주한다.
+- `status = PENDING` 이고 `dueDate < 현재 시각` 인 경우 **마감 초과** 상태로 간주한다.
 - Overdue는 별도 컬럼이 아닌 **조회 시 계산**되는 파생 상태이다.
 
 ---
@@ -86,7 +97,9 @@
 | BR-M-01 | 누구나 이메일과 비밀번호로 회원 등록을 할 수 있다. | 이메일: RFC 5322 형식, 비밀번호: 최소 8자·영문+숫자 조합 필수 |
 | BR-M-02 | 이메일은 시스템 내에서 중복될 수 없다. | 중복 시 HTTP 409 반환 |
 | BR-M-03 | 비밀번호는 저장 전 반드시 단방향 암호화(해시)되어야 한다. | bcrypt 알고리즘, cost factor 10 이상 |
-| BR-M-04 | 등록된 회원은 이메일과 비밀번호로 로그인하여 인증 토큰을 발급받는다. | JWT 발급, 만료 시간 24시간 |
+| BR-M-04 | 등록된 회원은 이메일과 비밀번호로 로그인하여 Access Token과 Refresh Token을 발급받는다. | Access Token: JWT, 만료 15분 / Refresh Token: UUID v4, 만료 7일 |
+| BR-M-05 | Refresh Token으로 새 Access Token과 Refresh Token을 재발급받을 수 있다 (Token Rotation). | 기존 Refresh Token 즉시 폐기 후 신규 발급; 만료·미존재 시 HTTP 401 반환 |
+| BR-M-06 | 로그아웃 시 해당 Refresh Token을 즉시 폐기한다. | 폐기 후 해당 토큰으로 재발급 불가 |
 
 ### 4.2 할 일 규칙
 
@@ -98,7 +111,7 @@
 | BR-T-04 | 할 일의 초기 상태는 PENDING 이다. | 생성 직후 status = PENDING |
 | BR-T-05 | 완료 처리는 상태를 PENDING → DONE 으로 변경하는 것이다. | 이미 DONE 상태에서 완료 요청 시 HTTP 400 반환 |
 | BR-T-06 | DONE 상태의 할 일도 PENDING 으로 되돌릴 수 있다. | 이미 PENDING 상태에서 되돌리기 요청 시 HTTP 400 반환 |
-| BR-T-07 | status = PENDING 이고 dueDate 가 오늘보다 이전이면 Overdue(마감 초과)로 표시한다. | dueDate < TODAY AND status = PENDING → overdue: true |
+| BR-T-07 | status = PENDING 이고 dueDate 가 현재 시각보다 이전이면 Overdue(마감 초과)로 표시한다. | dueDate < NOW() AND status = PENDING → overdue: true |
 | BR-T-08 | 할 일 삭제는 소프트 삭제 없이 물리 삭제로 처리한다. | 삭제 후 동일 ID 조회 시 HTTP 404 반환 |
 
 ---
@@ -126,7 +139,7 @@
 |----|------|------|
 | NFR-S-01 | 비밀번호 암호화 | bcrypt, cost factor 10 이상 |
 | NFR-S-02 | 인증 토큰 | JWT, 서버 서명 검증 필수 |
-| NFR-S-03 | 토큰 만료 | 발급 후 24시간 |
+| NFR-S-03 | 토큰 만료 | Access Token 발급 후 15분 / Refresh Token 발급 후 7일 |
 | NFR-S-04 | 전송 보안 | HTTPS 통신 필수 |
 
 ### 6.2 성능
@@ -151,7 +164,8 @@
 |------|------|------|
 | 회원 | Member | 시스템에 등록된 사용자 |
 | 로그인 | Login | 이메일·비밀번호로 인증하는 행위 |
-| 인증 토큰 | Auth Token | 로그인 성공 시 발급되는 접근 증명 값 |
+| 액세스 토큰 | Access Token | 로그인 성공 시 발급되는 단기 접근 증명 값 (유효 15분) |
+| 리프레시 토큰 | Refresh Token | 액세스 토큰 재발급에 사용되는 장기 토큰 (유효 7일, Token Rotation 적용) |
 | 할 일 | Todo | 회원이 관리하는 단일 일정 항목 |
 | 마감 날짜 | Due Date | 할 일을 완료해야 하는 목표 날짜 |
 | 미완료 | PENDING | 아직 완료되지 않은 할 일 상태 |
