@@ -9,7 +9,7 @@ import * as authService from '../services/authService';
 export default function TodoListPage() {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
-  const { todos, filteredTodos, filter, setFilter, loading, error, handleComplete, handleRevert, handleRemove } = useTodos();
+  const { filteredTodos, filter, setFilter, loading, error, handleComplete, handleRevert, handleRemove } = useTodos();
   const { theme, setTheme } = useTheme();
 
   async function handleLogout() {

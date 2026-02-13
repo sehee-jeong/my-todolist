@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import swaggerUi from 'swagger-ui-express';
-import swaggerDocument from '../../swagger/swagger.json';
+import swaggerDocument from '../swagger/swagger.json';
 import authRoutes from './routes/auth.routes';
 import todoRoutes from './routes/todo.routes';
 import healthRoutes from './routes/health.routes';
@@ -28,10 +28,5 @@ const errorHandler: express.ErrorRequestHandler = (err, _req, res, _next) => {
   res.status(status).json({ message });
 };
 app.use(errorHandler);
-
-const PORT = process.env.PORT ?? 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
 
 export default app;
