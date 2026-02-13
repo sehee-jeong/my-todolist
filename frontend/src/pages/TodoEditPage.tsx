@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import type { FormEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import * as todoService from '../services/todoService';
 
 export default function TodoEditPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
@@ -24,7 +26,7 @@ export default function TodoEditPage() {
         }
         setTitle(todo.title);
         setDescription(todo.description ?? '');
-        setDueDate(todo.dueDate ?? '');
+        setDueDate(todo.dueDate ? new Date(todo.dueDate).toISOString().slice(0, 16) : '');
       })
       .catch(() => navigate('/'))
       .finally(() => setInitialLoading(false));
@@ -33,7 +35,7 @@ export default function TodoEditPage() {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     if (!title.trim()) {
-      setError('제목을 입력해주세요.');
+      setError(t('todo.titleRequired'));
       return;
     }
     setError('');
@@ -48,23 +50,23 @@ export default function TodoEditPage() {
     } catch (err: unknown) {
       const e = err as { status?: number };
       if (e.status === 403) {
-        setError('접근 권한이 없습니다.');
+        setError(t('todo.noAccess'));
       } else {
-        setError('수정에 실패했습니다.');
+        setError(t('todo.editFailed'));
       }
     } finally {
       setLoading(false);
     }
   }
 
-  if (initialLoading) return <p className="status-message">불러오는 중...</p>;
+  if (initialLoading) return <p className="status-message">{t('common.loading')}</p>;
 
   return (
     <div className="page-container">
-      <h1>할 일 수정</h1>
+      <h1>{t('todo.editTitle')}</h1>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="title">제목 *</label>
+          <label htmlFor="title">{t('todo.titleLabel')}</label>
           <input
             id="title"
             type="text"
@@ -74,7 +76,7 @@ export default function TodoEditPage() {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="description">설명 (선택)</label>
+          <label htmlFor="description">{t('todo.descLabel')}</label>
           <textarea
             id="description"
             value={description}
@@ -83,10 +85,10 @@ export default function TodoEditPage() {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="dueDate">마감일 (선택)</label>
+          <label htmlFor="dueDate">{t('todo.dueDateLabel')}</label>
           <input
             id="dueDate"
-            type="date"
+            type="datetime-local"
             value={dueDate}
             onChange={(e) => setDueDate(e.target.value)}
           />
@@ -94,10 +96,10 @@ export default function TodoEditPage() {
         {error && <p className="error-message">{error}</p>}
         <div className="form-actions">
           <button type="button" onClick={() => navigate('/')} className="btn btn--secondary">
-            취소
+            {t('common.cancel')}
           </button>
           <button type="submit" disabled={loading} className="btn btn--primary">
-            {loading ? '저장 중...' : '저장'}
+            {loading ? t('common.saving') : t('common.save')}
           </button>
         </div>
       </form>

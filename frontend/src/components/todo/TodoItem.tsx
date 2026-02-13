@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import type { Todo } from '../../types/todo.types';
 
 interface Props {
@@ -10,6 +11,7 @@ interface Props {
 
 export default function TodoItem({ todo, onComplete, onRevert, onRemove }: Props) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const isDone = todo.status === 'DONE';
 
   return (
@@ -20,34 +22,34 @@ export default function TodoItem({ todo, onComplete, onRevert, onRemove }: Props
             {todo.title}
           </span>
           {todo.overdue && !isDone && (
-            <span className="todo-item__overdue-badge">마감 초과</span>
+            <span className="todo-item__overdue-badge">{t('todo.overdue')}</span>
           )}
         </div>
         {todo.description && (
           <p className="todo-item__description">{todo.description}</p>
         )}
         {todo.dueDate && (
-          <p className="todo-item__due-date">마감: {todo.dueDate}</p>
+          <p className="todo-item__due-date">{t('todo.dueDate')}: {new Date(todo.dueDate).toLocaleString()}</p>
         )}
       </div>
       <div className="todo-item__actions">
         {isDone ? (
           <button onClick={() => onRevert(todo.id)} className="btn btn--secondary">
-            완료 취소
+            {t('todo.revert')}
           </button>
         ) : (
           <button onClick={() => onComplete(todo.id)} className="btn btn--primary">
-            완료
+            {t('todo.complete')}
           </button>
         )}
         <button
           onClick={() => navigate(`/todos/${todo.id}/edit`)}
           className="btn btn--secondary"
         >
-          수정
+          {t('todo.edit')}
         </button>
         <button onClick={() => onRemove(todo.id)} className="btn btn--danger">
-          삭제
+          {t('todo.delete')}
         </button>
       </div>
     </div>

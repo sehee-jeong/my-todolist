@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { useNavigate, Navigate, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import * as authService from '../services/authService';
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -22,9 +24,9 @@ export default function LoginPage() {
     } catch (err: unknown) {
       const e = err as { status?: number };
       if (e.status === 401) {
-        setError('이메일 또는 비밀번호가 올바르지 않습니다.');
+        setError(t('auth.invalidCredentials'));
       } else {
-        setError('로그인에 실패했습니다. 다시 시도해주세요.');
+        setError(t('auth.loginFailed'));
       }
     } finally {
       setLoading(false);
@@ -33,10 +35,10 @@ export default function LoginPage() {
 
   return (
     <div className="auth-container">
-      <h1>로그인</h1>
+      <h1>{t('auth.login')}</h1>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="email">이메일</label>
+          <label htmlFor="email">{t('auth.email')}</label>
           <input
             id="email"
             type="email"
@@ -46,7 +48,7 @@ export default function LoginPage() {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="password">비밀번호</label>
+          <label htmlFor="password">{t('auth.password')}</label>
           <input
             id="password"
             type="password"
@@ -57,11 +59,11 @@ export default function LoginPage() {
         </div>
         {error && <p className="error-message">{error}</p>}
         <button type="submit" disabled={loading}>
-          {loading ? '처리 중...' : '로그인'}
+          {loading ? t('common.processing') : t('auth.login')}
         </button>
       </form>
       <p>
-        계정이 없으신가요? <Link to="/signup">회원가입</Link>
+        {t('auth.noAccount')} <Link to="/signup">{t('auth.signup')}</Link>
       </p>
     </div>
   );

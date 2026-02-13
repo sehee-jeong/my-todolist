@@ -26,7 +26,7 @@ CREATE TABLE todo (
     member_id   UUID         NOT NULL,
     title       VARCHAR(255) NOT NULL,
     description TEXT,
-    due_date    DATE,
+    due_date    TIMESTAMPTZ,
     status      VARCHAR(10)  NOT NULL DEFAULT 'PENDING',
     created_at  TIMESTAMPTZ  NOT NULL DEFAULT now(),
     updated_at  TIMESTAMPTZ  NOT NULL DEFAULT now(),

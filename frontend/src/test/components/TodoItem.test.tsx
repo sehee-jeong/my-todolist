@@ -47,8 +47,9 @@ describe('TodoItem', () => {
   });
 
   it('마감일 표시 (있을 때)', () => {
-    renderItem(makeTodo({ dueDate: '2026-02-20' }));
-    expect(screen.getByText('마감: 2026-02-20')).toBeInTheDocument();
+    renderItem(makeTodo({ dueDate: '2026-02-20T10:30:00.000Z' }));
+    const expected = `마감: ${new Date('2026-02-20T10:30:00.000Z').toLocaleString()}`;
+    expect(screen.getByText(expected)).toBeInTheDocument();
   });
 
   it('마감일 없으면 미표시', () => {

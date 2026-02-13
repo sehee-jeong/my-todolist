@@ -129,7 +129,7 @@ describe('Auth API', () => {
       const futureDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
       mockQuery
         .mockResolvedValueOnce({
-          rows: [{ id: 'rt-uuid-1', memberId: 'member-uuid-1', token: 'valid-refresh-token', expiresAt: futureDate, createdAt: '2026-01-01T00:00:00.000Z' }],
+          rows: [{ id: 'rt-uuid-1', member_id: 'member-uuid-1', token: 'valid-refresh-token', expires_at: futureDate, created_at: '2026-01-01T00:00:00.000Z' }],
         })
         .mockResolvedValueOnce({ rowCount: 1, rows: [] }) // DELETE old token
         .mockResolvedValueOnce({ rows: [] }); // INSERT new token
@@ -150,7 +150,7 @@ describe('Auth API', () => {
       const pastDate = new Date(Date.now() - 1000).toISOString();
       mockQuery
         .mockResolvedValueOnce({
-          rows: [{ id: 'rt-uuid-1', memberId: 'member-uuid-1', token: 'expired-token', expiresAt: pastDate, createdAt: '2026-01-01T00:00:00.000Z' }],
+          rows: [{ id: 'rt-uuid-1', member_id: 'member-uuid-1', token: 'expired-token', expires_at: pastDate, created_at: '2026-01-01T00:00:00.000Z' }],
         })
         .mockResolvedValueOnce({ rowCount: 1, rows: [] }); // DELETE expired token
 

@@ -1,0 +1,58 @@
+{
+  "theme": {
+    "system": "System",
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "common": {
+    "save": "Save",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "loading": "Loading...",
+    "processing": "Processing..."
+  },
+  "auth": {
+    "login": "Login",
+    "signup": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "nickname": "Nickname",
+    "passwordHint": "8+ characters, letters and numbers",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "loginFailed": "Login failed. Please try again.",
+    "invalidCredentials": "Invalid email or password.",
+    "emailTaken": "This email is already in use.",
+    "signupFailed": "Sign up failed. Please try again.",
+    "invalidInput": "Please check your input."
+  },
+  "todo": {
+    "myTodos": "My Todos",
+    "addTodo": "+ Add Todo",
+    "logout": "Logout",
+    "empty": "No todos yet. Add one!",
+    "titleLabel": "Title *",
+    "titleRequired": "Please enter a title.",
+    "descLabel": "Description (optional)",
+    "dueDateLabel": "Due Date (optional)",
+    "createTitle": "Add Todo",
+    "editTitle": "Edit Todo",
+    "createFailed": "Failed to create todo.",
+    "editFailed": "Failed to update todo.",
+    "loadFailed": "Failed to load todos.",
+    "noAccess": "You don't have permission.",
+    "complete": "Complete",
+    "revert": "Undo",
+    "edit": "Edit",
+    "delete": "Delete",
+    "overdue": "Overdue",
+    "dueDate": "Due",
+    "alreadyDone": "Already completed.",
+    "alreadyPending": "Already pending.",
+    "deleteConfirm": "Are you sure you want to delete?",
+    "deleteFailed": "Failed to delete todo.",
+    "filterAll": "All",
+    "filterPending": "In Progress",
+    "filterDone": "Done"
+  }
+}

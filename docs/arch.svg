@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 420" width="860" height="420" font-family="'Courier New', monospace">
+
+  <!-- Background -->
+  <rect width="860" height="420" fill="#F8F9FA" rx="12"/>
+
+  <!-- Title -->
+  <text x="430" y="36" text-anchor="middle" font-size="15" font-weight="bold" fill="#3C4043">Runtime Architecture — my-todolist</text>
+
+  <!-- ── Browser ── -->
+  <rect x="30" y="60" width="140" height="72" rx="8" fill="#fff" stroke="#DADCE0" stroke-width="1.5"/>
+  <text x="100" y="88" text-anchor="middle" font-size="13" font-weight="bold" fill="#3C4043">Browser</text>
+  <text x="100" y="108" text-anchor="middle" font-size="11" fill="#5F6368">React SPA</text>
+  <text x="100" y="122" text-anchor="middle" font-size="10" fill="#1A73E8">localhost:5173</text>
+
+  <!-- Browser → Vite 화살표 -->
+  <line x1="170" y1="96" x2="220" y2="96" stroke="#5F6368" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="195" y="88" text-anchor="middle" font-size="9" fill="#5F6368">HTTP</text>
+
+  <!-- ── Vite Dev Server ── -->
+  <rect x="220" y="60" width="160" height="72" rx="8" fill="#fff" stroke="#DADCE0" stroke-width="1.5"/>
+  <text x="300" y="84" text-anchor="middle" font-size="13" font-weight="bold" fill="#3C4043">Vite Dev Server</text>
+  <text x="300" y="102" text-anchor="middle" font-size="10" fill="#5F6368">Static + HMR</text>
+  <rect x="234" y="110" width="132" height="14" rx="3" fill="#E8F0FE"/>
+  <text x="300" y="121" text-anchor="middle" font-size="10" fill="#1A73E8">/api/* → :3000 proxy</text>
+
+  <!-- Vite → Express 화살표 -->
+  <line x1="380" y1="96" x2="430" y2="96" stroke="#5F6368" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="405" y="88" text-anchor="middle" font-size="9" fill="#5F6368">/api/*</text>
+
+  <!-- ── Express Server ── -->
+  <rect x="430" y="44" width="200" height="272" rx="8" fill="#fff" stroke="#DADCE0" stroke-width="1.5"/>
+  <rect x="430" y="44" width="200" height="28" rx="8" fill="#1A73E8"/>
+  <rect x="430" y="60" width="200" height="12" fill="#1A73E8"/>
+  <text x="530" y="63" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">Express Server :3000</text>
+
+  <!-- API Routes -->
+  <text x="446" y="90" font-size="10" fill="#5F6368">Auth</text>
+  <text x="446" y="106" font-size="10" fill="#3C4043">POST  /api/auth/signup</text>
+  <text x="446" y="120" font-size="10" fill="#3C4043">POST  /api/auth/login</text>
+  <text x="446" y="134" font-size="10" fill="#3C4043">POST  /api/auth/refresh</text>
+  <text x="446" y="148" font-size="10" fill="#3C4043">POST  /api/auth/logout</text>
+
+  <line x1="446" y1="157" x2="618" y2="157" stroke="#DADCE0" stroke-width="1"/>
+
+  <text x="446" y="172" font-size="10" fill="#5F6368">Todos  (JWT 인증 필요)</text>
+  <text x="446" y="188" font-size="10" fill="#3C4043">GET    /api/todos</text>
+  <text x="446" y="202" font-size="10" fill="#3C4043">POST   /api/todos</text>
+  <text x="446" y="216" font-size="10" fill="#3C4043">PATCH  /api/todos/:id</text>
+  <text x="446" y="230" font-size="10" fill="#3C4043">PATCH  /api/todos/:id/complete</text>
+  <text x="446" y="244" font-size="10" fill="#3C4043">PATCH  /api/todos/:id/revert</text>
+  <text x="446" y="258" font-size="10" fill="#3C4043">DELETE /api/todos/:id</text>
+
+  <line x1="446" y1="267" x2="618" y2="267" stroke="#DADCE0" stroke-width="1"/>
+
+  <text x="446" y="282" font-size="10" fill="#5F6368">Docs</text>
+  <text x="446" y="296" font-size="10" fill="#3C4043">GET    /docs  (Swagger UI)</text>
+
+  <!-- Express → PostgreSQL 화살표 -->
+  <line x1="630" y1="180" x2="680" y2="180" stroke="#5F6368" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="655" y="172" text-anchor="middle" font-size="9" fill="#5F6368">pg.Pool</text>
+
+  <!-- ── PostgreSQL ── -->
+  <rect x="680" y="60" width="150" height="240" rx="8" fill="#fff" stroke="#DADCE0" stroke-width="1.5"/>
+  <rect x="680" y="60" width="150" height="28" rx="8" fill="#336791"/>
+  <rect x="680" y="76" width="150" height="12" fill="#336791"/>
+  <text x="755" y="79" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">PostgreSQL 17</text>
+  <text x="755" y="100" text-anchor="middle" font-size="10" fill="#5F6368">todolist_dev</text>
+
+  <!-- member table -->
+  <rect x="696" y="110" width="118" height="68" rx="4" fill="#F8F9FA" stroke="#DADCE0" stroke-width="1"/>
+  <rect x="696" y="110" width="118" height="18" rx="4" fill="#E8F0FE"/>
+  <rect x="696" y="120" width="118" height="8" fill="#E8F0FE"/>
+  <text x="755" y="123" text-anchor="middle" font-size="10" font-weight="bold" fill="#1A73E8">member</text>
+  <text x="704" y="138" font-size="9" fill="#5F6368">id  email  password</text>
+  <text x="704" y="151" font-size="9" fill="#5F6368">nickname  created_at</text>
+  <text x="704" y="164" font-size="9" fill="#9E9E9E">PK: id  UK: email</text>
+
+  <!-- refresh_token table -->
+  <rect x="696" y="188" width="118" height="72" rx="4" fill="#F8F9FA" stroke="#DADCE0" stroke-width="1"/>
+  <rect x="696" y="188" width="118" height="18" rx="4" fill="#E8F0FE"/>
+  <rect x="696" y="198" width="118" height="8" fill="#E8F0FE"/>
+  <text x="755" y="201" text-anchor="middle" font-size="10" font-weight="bold" fill="#1A73E8">refresh_token</text>
+  <text x="704" y="216" font-size="9" fill="#5F6368">id  member_id  token</text>
+  <text x="704" y="229" font-size="9" fill="#5F6368">expires_at  created_at</text>
+  <text x="704" y="242" font-size="9" fill="#9E9E9E">FK: member_id → member</text>
+  <text x="704" y="253" font-size="9" fill="#9E9E9E">ON DELETE CASCADE</text>
+
+  <!-- todo table -->
+  <rect x="696" y="270" width="118" height="22" rx="4" fill="#F8F9FA" stroke="#DADCE0" stroke-width="1"/>
+  <rect x="696" y="270" width="118" height="18" rx="4" fill="#E8F0FE"/>
+  <text x="755" y="283" text-anchor="middle" font-size="10" font-weight="bold" fill="#1A73E8">todo</text>
+
+  <!-- ── 인증 흐름 레이블 (하단) ── -->
+  <rect x="30" y="360" width="800" height="44" rx="8" fill="#fff" stroke="#DADCE0" stroke-width="1.5"/>
+  <text x="50" y="377" font-size="10" font-weight="bold" fill="#3C4043">Auth Flow</text>
+  <text x="50" y="394" font-size="10" fill="#5F6368">Login → accessToken (15m) + refreshToken (7d) 발급 →</text>
+  <text x="340" y="394" font-size="10" fill="#5F6368">모든 요청 Authorization: Bearer &lt;accessToken&gt; →</text>
+  <text x="600" y="394" font-size="10" fill="#5F6368">401 시 자동 로그아웃</text>
+
+  <!-- Arrow marker -->
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5F6368"/>
+    </marker>
+  </defs>
+
+</svg>

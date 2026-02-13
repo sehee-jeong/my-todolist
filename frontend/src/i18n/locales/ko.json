@@ -1,0 +1,58 @@
+{
+  "theme": {
+    "system": "시스템",
+    "light": "라이트",
+    "dark": "다크"
+  },
+  "common": {
+    "save": "저장",
+    "saving": "저장 중...",
+    "cancel": "취소",
+    "loading": "불러오는 중...",
+    "processing": "처리 중..."
+  },
+  "auth": {
+    "login": "로그인",
+    "signup": "회원가입",
+    "email": "이메일",
+    "password": "비밀번호",
+    "nickname": "닉네임",
+    "passwordHint": "8자 이상, 영문+숫자 포함",
+    "noAccount": "계정이 없으신가요?",
+    "hasAccount": "이미 계정이 있으신가요?",
+    "loginFailed": "로그인에 실패했습니다. 다시 시도해주세요.",
+    "invalidCredentials": "이메일 또는 비밀번호가 올바르지 않습니다.",
+    "emailTaken": "이미 사용 중인 이메일입니다.",
+    "signupFailed": "회원가입에 실패했습니다. 다시 시도해주세요.",
+    "invalidInput": "입력 값을 확인해주세요."
+  },
+  "todo": {
+    "myTodos": "내 할 일",
+    "addTodo": "+ 할 일 추가",
+    "logout": "로그아웃",
+    "empty": "할 일이 없습니다. 추가해보세요!",
+    "titleLabel": "제목 *",
+    "titleRequired": "제목을 입력해주세요.",
+    "descLabel": "설명 (선택)",
+    "dueDateLabel": "마감일 (선택)",
+    "createTitle": "할 일 추가",
+    "editTitle": "할 일 수정",
+    "createFailed": "할 일 생성에 실패했습니다.",
+    "editFailed": "수정에 실패했습니다.",
+    "loadFailed": "할 일 목록을 불러오는데 실패했습니다.",
+    "noAccess": "접근 권한이 없습니다.",
+    "complete": "완료",
+    "revert": "완료 취소",
+    "edit": "수정",
+    "delete": "삭제",
+    "overdue": "마감 초과",
+    "dueDate": "마감",
+    "alreadyDone": "이미 완료된 항목입니다.",
+    "alreadyPending": "이미 미완료 상태입니다.",
+    "deleteConfirm": "삭제하시겠습니까?",
+    "deleteFailed": "삭제에 실패했습니다.",
+    "filterAll": "전체",
+    "filterPending": "진행 중",
+    "filterDone": "완료"
+  }
+}

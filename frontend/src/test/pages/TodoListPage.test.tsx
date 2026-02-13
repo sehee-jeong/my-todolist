@@ -119,4 +119,42 @@ describe('TodoListPage', () => {
     fireEvent.click(screen.getByText('+ 할 일 추가'));
     expect(mockNavigate).toHaveBeenCalledWith('/todos/new');
   });
+
+  it('필터 탭 3개(전체/진행 중/완료) 렌더링', async () => {
+    mockGetAll.mockResolvedValueOnce([]);
+    renderPage();
+    await waitFor(() => expect(screen.getByText('전체')).toBeInTheDocument());
+    expect(screen.getByText('진행 중')).toBeInTheDocument();
+    expect(screen.getByText('완료')).toBeInTheDocument();
+  });
+
+  it('진행 중 탭 클릭 시 PENDING 항목만 표시', async () => {
+    mockGetAll.mockResolvedValueOnce([
+      makeTodo({ id: 'todo-1', title: 'PENDING 할 일', status: 'PENDING' }),
+      makeTodo({ id: 'todo-2', title: 'DONE 할 일', status: 'DONE' }),
+    ]);
+    renderPage();
+    await waitFor(() => expect(screen.getByText('PENDING 할 일')).toBeInTheDocument());
+
+    fireEvent.click(screen.getByText('진행 중'));
+
+    expect(screen.getByText('PENDING 할 일')).toBeInTheDocument();
+    expect(screen.queryByText('DONE 할 일')).not.toBeInTheDocument();
+  });
+
+  it('완료 탭 클릭 시 DONE 항목만 표시', async () => {
+    mockGetAll.mockResolvedValueOnce([
+      makeTodo({ id: 'todo-1', title: 'PENDING 할 일', status: 'PENDING' }),
+      makeTodo({ id: 'todo-2', title: 'DONE 할 일', status: 'DONE' }),
+    ]);
+    renderPage();
+    await waitFor(() => expect(screen.getByText('DONE 할 일')).toBeInTheDocument());
+
+    const filterTabs = screen.getAllByText('완료');
+    const doneTab = filterTabs.find((el) => el.classList.contains('filter-tab'))!;
+    fireEvent.click(doneTab);
+
+    expect(screen.getByText('DONE 할 일')).toBeInTheDocument();
+    expect(screen.queryByText('PENDING 할 일')).not.toBeInTheDocument();
+  });
 });
