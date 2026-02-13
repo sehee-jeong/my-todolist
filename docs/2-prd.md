@@ -4,9 +4,17 @@
 
 | 항목 | 내용 |
 |------|------|
-| 버전 | v1.0 |
+| 버전 | v1.1 |
 | 작성일 | 2026-02-10 |
-| 근거 문서 | 도메인 정의서 v1.2 |
+| 최종 수정일 | 2026-02-12 |
+| 근거 문서 | 도메인 정의서 v1.3 |
+
+### 변경 이력
+
+| 버전 | 날짜 | 변경 내용 |
+|------|------|----------|
+| v1.0 | 2026-02-10 | 최초 작성 |
+| v1.1 | 2026-02-12 | Refresh Token 도입 반영(F-02 수정, F-09/F-10 신규), dueDate TIMESTAMPTZ 반영, F-P-03 필터 MVP 승격, NFR-S-03 업데이트 |
 
 ---
 
@@ -64,19 +72,48 @@
 - [ ] 저장된 비밀번호는 bcrypt 해시값이며 평문이 아니다
 
 #### F-02 로그인
-- 이메일·비밀번호 인증 후 JWT 발급
-- 관련 규칙: BR-M-04
+- 이메일·비밀번호 인증 후 Access Token + Refresh Token 발급
+- 관련 규칙: BR-M-04, BR-M-05
 
 | 세부 요구사항 | 내용 |
 |--------------|------|
-| F-02-1 | 인증 성공 시 JWT 발급, 만료 24시간 |
+| F-02-1 | 인증 성공 시 Access Token(JWT, 15분) + Refresh Token(UUID v4, 7일) 발급 |
 | F-02-2 | 인증 실패 시 HTTP 401 반환 |
 
 **인수 기준**
-- [ ] 등록된 이메일과 올바른 비밀번호 입력 시 JWT가 발급된다
-- [ ] 발급된 JWT의 만료 시간은 24시간이다
+- [ ] 등록된 이메일과 올바른 비밀번호 입력 시 accessToken과 refreshToken이 발급된다
+- [ ] Access Token의 만료 시간은 15분이다
+- [ ] Refresh Token의 만료 시간은 7일이다
 - [ ] 잘못된 비밀번호 입력 시 HTTP 401이 반환된다
 - [ ] 미등록 이메일로 로그인 시도 시 HTTP 401이 반환된다
+
+#### F-09 토큰 갱신
+- Refresh Token으로 새 Access Token + Refresh Token 재발급 (Token Rotation)
+- 관련 규칙: BR-M-05
+
+| 세부 요구사항 | 내용 |
+|--------------|------|
+| F-09-1 | 유효한 Refresh Token 제출 시 새 Access Token + Refresh Token 발급 |
+| F-09-2 | 기존 Refresh Token은 즉시 폐기 |
+| F-09-3 | 만료되거나 존재하지 않는 Refresh Token 제출 시 HTTP 401 반환 |
+
+**인수 기준**
+- [ ] 유효한 Refresh Token으로 재발급 요청 시 새 토큰 쌍이 반환된다
+- [ ] 재발급 후 기존 Refresh Token으로 재요청 시 HTTP 401이 반환된다
+- [ ] 만료된 Refresh Token으로 요청 시 HTTP 401이 반환된다
+
+#### F-10 로그아웃
+- Refresh Token 폐기
+- 관련 규칙: BR-M-06
+
+| 세부 요구사항 | 내용 |
+|--------------|------|
+| F-10-1 | 로그아웃 시 해당 Refresh Token을 즉시 폐기 |
+| F-10-2 | 성공 시 HTTP 204 반환 |
+
+**인수 기준**
+- [ ] 로그아웃 후 해당 Refresh Token으로 토큰 갱신 시 HTTP 401이 반환된다
+- [ ] 로그아웃 성공 시 HTTP 204가 반환된다
 
 #### F-03 할 일 생성
 - 제목(필수), 설명(선택), 마감 날짜(선택) 입력으로 할 일 추가
@@ -102,12 +139,13 @@
 | 세부 요구사항 | 내용 |
 |--------------|------|
 | F-04-1 | 본인 소유 할 일만 반환 |
-| F-04-2 | dueDate < TODAY AND status = PENDING 인 항목에 overdue: true 포함 |
+| F-04-2 | dueDate < NOW() AND status = PENDING 인 항목에 overdue: true 포함 |
+| F-04-3 | 탭 필터(전체 / 진행중 / 완료)로 status별 목록 전환 가능 |
 
 **인수 기준**
 - [ ] 로그인한 사용자는 본인 소유의 할 일만 조회된다
 - [ ] 타인의 할 일은 목록에 포함되지 않는다
-- [ ] dueDate < 오늘 AND status = PENDING인 항목의 overdue 값이 true이다
+- [ ] dueDate < 현재 시각 AND status = PENDING인 항목의 overdue 값이 true이다
 - [ ] dueDate가 없는 항목의 overdue 값은 false이다
 - [ ] DONE 상태 항목은 dueDate가 지나도 overdue 값이 false이다
 
@@ -170,7 +208,7 @@
 | F-08-2 | 서버에서 계산된 파생 상태 사용 (별도 컬럼 아님) |
 
 **인수 기준**
-- [ ] status = PENDING이고 dueDate < 오늘인 항목에 붉은 배지가 표시된다
+- [ ] status = PENDING이고 dueDate < 현재 시각인 항목에 붉은 배지가 표시된다
 - [ ] DONE 상태 항목은 dueDate가 지나도 Overdue 배지가 표시되지 않는다
 - [ ] dueDate가 없는 항목은 Overdue 배지가 표시되지 않는다
 - [ ] Overdue 항목에 "마감 초과" 레이블이 함께 표시된다
@@ -181,8 +219,10 @@
 |------|------|
 | F-P-01 회원 탈퇴 | 본인 계정 및 데이터 삭제 |
 | F-P-02 프로필 수정 | 닉네임 변경 |
-| F-P-03 할 일 필터/정렬 | 상태별, 마감일순 필터 |
+| F-P-03 할 일 정렬 | 마감일순 정렬 |
 | F-P-04 비밀번호 변경 | 현재 비밀번호 확인 후 변경 |
+
+> **참고**: 상태별 탭 필터(전체/진행중/완료)는 F-04-3으로 MVP에 포함되어 구현 완료.
 
 ---
 
@@ -194,7 +234,7 @@
 |----|------|------|
 | NFR-S-01 | 비밀번호 암호화 | bcrypt, cost factor 10 이상 |
 | NFR-S-02 | 인증 토큰 | JWT, 서버 서명 검증 필수 |
-| NFR-S-03 | 토큰 만료 | 발급 후 24시간 |
+| NFR-S-03 | 토큰 만료 | Access Token 발급 후 15분 / Refresh Token 발급 후 7일 |
 | NFR-S-04 | 전송 보안 | HTTPS 통신 필수 |
 
 ### 4.2 성능
@@ -226,6 +266,8 @@
 | US-07 | 사용자로서 잘못 완료한 할 일을 다시 PENDING으로 돌리고 싶다 | 완료 취소 클릭 시 PENDING으로 복원 | F-07 |
 | US-08 | 사용자로서 필요 없는 할 일을 삭제하고 싶다 | 삭제 확인 후 목록에서 제거, 재조회 시 404 | F-06 |
 | US-09 | 사용자로서 마감일이 지난 미완료 항목을 즉시 알아보고 싶다 | Overdue 항목에 붉은 배지 표시 | F-08 |
+| US-10 | 사용자로서 토큰이 만료되어도 재로그인 없이 서비스를 계속 이용하고 싶다 | Refresh Token으로 자동 토큰 갱신 | F-09 |
+| US-11 | 사용자로서 로그아웃하여 내 세션을 안전하게 종료하고 싶다 | 로그아웃 시 Refresh Token 폐기 | F-10 |
 
 ---
 
@@ -248,7 +290,7 @@
 
 ### 6.3 Overdue 시각화 정의
 
-- 조건: `status = PENDING` AND `dueDate < 오늘`
+- 조건: `status = PENDING` AND `dueDate < 현재 시각`
 - 표시: 붉은 계열(`#D32F2F` 권장) 배지 또는 경고 아이콘 + "마감 초과" 레이블
 - DONE 상태 항목은 Overdue 표시 없음
 
@@ -278,7 +320,7 @@
 | 백엔드 | Node.js / Express | REST API |
 | DB 연동 | pg | Prisma 사용 금지 |
 | 데이터베이스 | PostgreSQL 17 | |
-| 인증 | JWT (jsonwebtoken) | BR-M-04 요건 충족 |
+| 인증 | JWT (jsonwebtoken) + Refresh Token (UUID v4) | BR-M-04~06 요건 충족, Token Rotation 적용 |
 | 비밀번호 해싱 | bcrypt | BR-M-03 요건 충족 |
 | 배포 | Vercel | 배포 환경 구성은 MVP 범위 외 |
 
