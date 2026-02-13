@@ -11,7 +11,10 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: process.env.CORS_ORIGIN ?? 'https://my-todolist-app.vercel.app',
+  credentials: true,
+}));
 app.use(express.json());
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
