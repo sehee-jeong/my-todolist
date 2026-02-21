@@ -1,15 +1,8 @@
 {
-  "mcpServers": {
+ "mcpServers": {
     "postgresql-mcp": {
-      "command": "npx",
-      "args": ["-y", "@henkey/postgres-mcp-server"],
-      "env": {
-        "POSTGRES_CONNECTION_STRING": "postgresql://postgres:sjsk042300@localhost:5432/postgres"
-      }
-    },
-    "playwright": {
-      "command": "npx",
-      "args": ["-y", "@playwright/mcp@latest"]
+        "command": "npx",
+        "args": ["-y", "@henkey/postgres-mcp-server"]
     }
-  }
+}
 }
